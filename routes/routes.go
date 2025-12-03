@@ -8,12 +8,12 @@ import (
 	"github.com/EnesAybeyR/chi-postgresql-jwt.git/mdware"
 	"github.com/EnesAybeyR/chi-postgresql-jwt.git/service"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 func GetRoutes() *chi.Mux {
 	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+
+	r.Use(mdware.ZapLogger)
 	r.Get("/users", service.GetUsers)
 	r.Post("/user", service.CreateUser)
 	r.Get("/user/{id}", service.GetUser)

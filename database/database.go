@@ -2,9 +2,10 @@ package database
 
 import (
 	"fmt"
-	"log"
+
 	"os"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,8 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
+	Logger, _ := zap.NewDevelopment()
+	defer Logger.Sync()
 	dbHost := os.Getenv("HOST")
 	dbUser := os.Getenv("USER")
 	dbPass := os.Getenv("PASSWORD")
@@ -20,8 +23,8 @@ func ConnectDB() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", dbHost, dbUser, dbPass, dbName, dbPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Database Connection Error:", err)
+		Logger.Fatal("Database Connection Error: ", zap.Error(err))
 	}
 	DB = db
-	fmt.Println("Database connected successfully")
+	Logger.Info("Database connected successfully")
 }

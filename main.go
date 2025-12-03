@@ -1,28 +1,36 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/EnesAybeyR/chi-postgresql-jwt.git/database"
+	"github.com/EnesAybeyR/chi-postgresql-jwt.git/logger"
 	"github.com/EnesAybeyR/chi-postgresql-jwt.git/models"
 	"github.com/EnesAybeyR/chi-postgresql-jwt.git/routes"
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 )
 
+func init() {
+
+}
+
 func main() {
+	logger.InitLogger()
+	defer logger.Log.Sync()
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logger.Log.Fatal("Error loading .env file")
 	}
 	database.ConnectDB()
 	if err := database.DB.AutoMigrate(&models.User{}, &models.RefreshToken{}); err != nil {
-		log.Fatalf("db connection error: %v", err)
+		logger.Log.Error("Db connection error: ", zap.Error(err))
 	}
-	fmt.Println("Database Migrated")
+	logger.Log.Info("Database Migrated")
 
 	r := routes.GetRoutes()
-	fmt.Println("server 8081 portunda calisiyor")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	logger.Log.Info("server 8081 portunda calisiyor")
+	if err := http.ListenAndServe(":8081", r); err != nil {
+		logger.Log.Fatal("server failed to start: ", zap.Error(err))
+	}
 }
