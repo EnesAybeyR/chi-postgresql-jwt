@@ -1,0 +1,2 @@
+GET http://localhost:8081/prof
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InhrcmFsdHJAZ21haWwuY29tIiwiZXhwIjoiMjAyNS0xMi0wNFQxMTo0NDoxMC42NTE2NTY5KzAzOjAwIiwiaWF0IjoxNzY0NzUxNDUwLCJzdWIiOjN9.dDG--3aOkHQnks3KB2sMOXGb-Twclb3xbV8dvAchiDw
